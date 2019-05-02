@@ -1,12 +1,15 @@
 import React, { Component } from 'react';
 import ChannelSection from './components/channels/ChannelSelection';
 import UserSection from './components/users/UserSection';
+import MessageSection from './components/messages/MessageSection';
 import './App.css';
 
 class App extends Component {
 	state = {
 		channels: [],
-		users: []
+		users: [],
+		messages: [],
+		activeChannel: {}
 	};
 
 	addChannel = name => {
@@ -29,6 +32,15 @@ class App extends Component {
 		this.setState({ activeUser });
 	};
 
+	addMessage = body => {
+		const { messages, users } = this.state;
+		const createdAt = new Date();
+		const author = users.length > 0 ? users[0].name : 'anonymous';
+		messages.push({ id: messages.length, body, createdAt, author });
+		this.setState({ messages });
+		console.log('addMessage', messages);
+	};
+
 	render() {
 		return (
 			<div className="app">
@@ -36,6 +48,7 @@ class App extends Component {
 					<ChannelSection {...this.state} addChannel={this.addChannel} setChannel={this.setChannel} />
 					<UserSection {...this.state} addUser={this.addUser} setUser={this.setUser} />
 				</div>
+				<MessageSection {...this.state} addMessage={this.addMessage} />
 			</div>
 		);
 	}
